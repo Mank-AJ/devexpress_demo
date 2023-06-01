@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write(decodeURIComponent('%3Cscript src="js/jquery.min.js"%3E%3C/script%3E'))</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/event.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/supplemental.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cldrjs/0.4.4/cldr/unresolved.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn3.devexpress.com/jslib/22.2.6/css/dx.light.css" />
+    <script src="https://cdn3.devexpress.com/jslib/22.2.6/js/dx.all.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div id="gridContainer"></div>
+    </div>
+</body>
+</html>
+<script>
+    $(() => {
+        $('#gridContainer').dxDataGrid({
+            dataSource: {
+                store: {
+                    type: 'odata',
+                    url: 'Invoice/dxDataGrid_List',
+    //url: 'https://js.devexpress.com/Demos/SalesViewer/odata/DaySaleDtoes',
+                    //data: invoiceData,
+                    keyExp: 'Id',
+                    select: ['DocNumber', 'Id', 'Name', 'BillingAddress', 'ShippingAddress', 'Description', 'Qty']
+                    //beforeSend(request) {
+                    //    const year = new Date().getFullYear() - 1;
+                    //    request.params.startDate = `${year}-05-10`;
+                    //    request.params.endDate = `${year}-5-15`;
+                    //},
+                },
+            },
+            paging: {
+                pageSize: 10,
+            },
+            pager: {
+                showPageSizeSelector: true,
+                allowedPageSizes: [10, 25, 50, 100],
+            },
+            remoteOperations: false,
+            searchPanel: {
+                visible: true,
+                highlightCaseSensitive: true,
+            },
+            groupPanel: { visible: true },
+            grouping: {
+                autoExpandAll: false,
+            },
+            allowColumnReordering: true,
+            rowAlternationEnabled: true,
+            showBorders: true,
+            columns: [
+                {
+                    dataField: 'DocNumber',
+                     caption: 'DocNumber',
+                    groupIndex: 0,
+                },
+                {
+                    dataField: 'Id',
+                    caption: 'Id',
+                    dataType: 'string',
+                    //format: 'currency',
+                    alignment: 'right',
+                },
+
+                {
+                    dataField: 'Name',
+                    dataType: 'string',
+                },
+             
+                {
+                    dataField: 'BillingAddress',
+                    caption: 'Billing Address',
+                    dataType: 'string',
+                },
+                {
+                    dataField: 'ShippingAddress',
+                    dataType: 'string',
+                },
+                {
+                    dataField: 'Description',
+                    dataType: 'string',
+                },
+                {
+                    dataField: 'Qty',
+                    dataType: 'number',
+                    width: 150,
+                },
+
+                {
+                    dataField: 'UnitPrice',
+                    caption: 'Unit Price',
+                    dataType: 'number',
+                    format: 'total',
+                    alignment: 'right',
+                    allowGrouping: false,
+                    cellTemplate: discountCellTemplate,
+                    cssClass: 'bullet',
+                },
+                {
+                    dataField: 'Total',
+                    caption: 'Total Price',
+                    dataType: 'number',
+                    format: 'total',
+                    alignment: 'right',
+                    allowGrouping: false,
+                    cellTemplate: discountCellTemplate,
+                    cssClass: 'bullet',
+                },
+                {
+                    dataField: 'Due Date',
+                    caption: 'Due Date',
+                    dataType: 'date',
+                },
+            ],
+            onContentReady(e) {
+                if (!collapsed) {
+                    collapsed = true;
+                    e.component.expandRow(['EnviroCare']);
+                }
+            },
+        });
+    });
+    //$(function () {
+    //    $('#gridContainer').dxDataGrid({
+    //        dataSource: {
+    //            load: function () {
+    //                return $.ajax({
+    //                    url: 'Invoice/dxDataGrid_List',
+    //                    dataType: 'json',
+    //                    //type: 'GET'
+    //                });
+    //            }
+    //        },
+    //        //keyExpr: 'Id',
+    //        paging: {
+    //            pageSize: 10,
+    //        },
+    //        pager: {
+    //            showPageSizeSelector: true,
+    //            allowedPageSizes: [10, 25, 50, 100],
+    //        },
+    //        remoteOperations: false,
+    //        searchPanel: {
+    //            visible: true,
+    //            highlightCaseSensitive: true,
+    //        },
+    //        groupPanel: { visible: true },
+    //        grouping: {
+    //            autoExpandAll: false,
+    //        },
+    //        allowColumnReordering: true,
+    //        rowAlternationEnabled: true,
+    //        showBorders: true,
+    //        columns: [
+    //                {
+    //                    dataField: 'DocNumber',
+    //                     caption: 'DocNumber',
+    //                    groupIndex: 0,
+    //                },
+                
+    //                {
+    //                    dataField: 'Id',
+    //                    caption: 'Id',
+    //                    dataType: 'number',
+    //                    //format: 'currency',
+    //                    alignment: 'right',
+    //                },
+
+    //                {
+    //                    dataField: 'Name',
+    //                    dataType: 'string',
+    //                },
+
+    //                {
+    //                    dataField: 'Billing Address',
+    //                    dataType: 'string',
+    //                },
+    //                {
+    //                    dataField: 'Shipping Address',
+    //                    dataType: 'string',
+    //                },
+    //                {
+    //                    dataField: 'DESCRIPTION',
+    //                    dataType: 'string',
+    //                },
+    //                {
+    //                    dataField: 'QTY',
+    //                    dataType: 'number',
+    //                    width: 150,
+    //                },
+
+    //                {
+    //                    dataField: 'UNIT PRIC',
+    //                    caption: 'Unit Price',
+    //                    dataType: 'number',
+    //                    format: 'total',
+    //                    alignment: 'right',
+    //                    allowGrouping: false,
+    //                    cellTemplate: discountCellTemplate,
+    //                    cssClass: 'bullet',
+    //                },
+    //                {
+    //                    dataField: 'Total',
+    //                    caption: 'Total Price',
+    //                    dataType: 'number',
+    //                    format: 'total',
+    //                    alignment: 'right',
+    //                    allowGrouping: false,
+    //                    cellTemplate: discountCellTemplate,
+    //                    cssClass: 'bullet',
+    //                },
+    //                {
+    //                    dataField: 'Due Date',
+    //                    dataType: 'date',
+    //                },
+    //            ],
+    //            onContentReady(e) {
+    //                if (!collapsed) {
+    //                    collapsed = true;
+    //                    e.component.expandRow(['EnviroCare']);
+    //                }
+    //            },
+    //    });
+    //});
+
+    const discountCellTemplate = function (container, options) {
+        $('<div/>').dxBullet({
+            onIncidentOccurred: null,
+            size: {
+                width: 150,
+                height: 35,
+            },
+            margin: {
+                top: 5,
+                bottom: 0,
+                left: 5,
+            },
+            showTarget: false,
+            showZeroLevel: true,
+            value: options.value * 100,
+            startScaleValue: 0,
+            endScaleValue: 100,
+            tooltip: {
+                enabled: true,
+                font: {
+                    size: 18,
+                },
+                paddingTopBottom: 2,
+                customizeTooltip() {
+                    return { text: options.text };
+                },
+                zIndex: 5,
+            },
+        }).appendTo(container);
+    };
+
+    let collapsed = false;
+
+</script>
