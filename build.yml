@@ -44,5 +44,6 @@ jobs:
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"Mank-AJ_devexpress_demo" /o:"mank-aj" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          <insert_your_build_command>
+       dotnet restore  // Restore NuGet packages
+dotnet build    // Build the project
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
